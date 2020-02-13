@@ -45,19 +45,37 @@ function Card(data) {
     following.textContent = `Following: ${this.data.following}`;
     bio.textContent = this.data.bio;
 
-    console.log(this.data);
-    console.log(card);
     return card;
+  }
+
+  this.createCard = () => {
+    document.querySelector('.cards').appendChild(this.createComponent());
+  }
+
+  this.createFollowersCards = () => {
+    axios.get(this.data.followers_url)
+      .then(res => {
+        res.data.forEach(follower => {
+          axios.get(follower.url)
+            .then(res => {
+              const card = new Card(res.data);
+              document.querySelector('.cards').appendChild(card.createComponent());
+            })
+            .catch(err => console.log(err))
+        });
+      })
+      .catch(err => console.log(err))
   }
 }
 
 axios.get('https://api.github.com/users/fbzr')
   .then(res => {
     const card = new Card(res.data);
-    document.querySelector('.cards').appendChild(card.createComponent());
+    card.createCard();
+    card.createFollowersCards();
   })
   .catch(err => {
-
+    console.log(err);
   });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
