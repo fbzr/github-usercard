@@ -16,6 +16,7 @@ function Card(data) {
     const followers = document.createElement('p');
     const following = document.createElement('p');
     const bio = document.createElement('p');
+    const calendar = document.createElement('div');
 
     card.appendChild(img);
     card.appendChild(cardInfo);
@@ -27,11 +28,14 @@ function Card(data) {
     cardInfo.appendChild(followers);
     cardInfo.appendChild(following);
     cardInfo.appendChild(bio);
+    card.appendChild(calendar);
 
     card.classList.add('card');
     cardInfo.classList.add('card-info');
     name.classList.add('name');
     username.classList.add('username');
+    calendar.classList.add('calendar');
+    calendar.classList.add(`calendar-${this.data.login}`);
 
     img.setAttribute('src', this.data.avatar_url);
     gitHub.setAttribute('href', this.data.html_url);
@@ -50,6 +54,7 @@ function Card(data) {
 
   this.createCard = () => {
     document.querySelector('.cards').appendChild(this.createComponent());
+    GitHubCalendar(`.calendar-${this.data.login}`, this.data.login, { responsive: true });
   }
 
   this.createFollowersCards = () => {
@@ -60,6 +65,7 @@ function Card(data) {
             .then(res => {
               const card = new Card(res.data);
               document.querySelector('.cards').appendChild(card.createComponent());
+              GitHubCalendar(`.calendar-${res.data.login}`, res.data.login, { responsive: true });
             })
             .catch(err => console.log(err))
         });
@@ -74,9 +80,7 @@ axios.get('https://api.github.com/users/fbzr')
     card.createCard();
     card.createFollowersCards();
   })
-  .catch(err => {
-    console.log(err);
-  });
+  .catch(err => console.log(err));
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
