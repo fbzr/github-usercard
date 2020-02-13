@@ -2,6 +2,9 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+
+
+
 function Card(data) {
   this.data = data;
   this.createComponent = () => {
@@ -16,6 +19,7 @@ function Card(data) {
     const followers = document.createElement('p');
     const following = document.createElement('p');
     const bio = document.createElement('p');
+    const moreInfo = document.createElement('div');
     const calendar = document.createElement('div');
 
     card.appendChild(img);
@@ -28,12 +32,14 @@ function Card(data) {
     cardInfo.appendChild(followers);
     cardInfo.appendChild(following);
     cardInfo.appendChild(bio);
-    card.appendChild(calendar);
+    card.appendChild(moreInfo);
+    moreInfo.appendChild(calendar);
 
     card.classList.add('card');
     cardInfo.classList.add('card-info');
     name.classList.add('name');
     username.classList.add('username');
+    moreInfo.classList.add('more-info');
     calendar.classList.add('calendar');
     calendar.classList.add(`calendar-${this.data.login}`);
 
@@ -48,7 +54,7 @@ function Card(data) {
     followers.textContent = `Followers: ${this.data.followers}`;
     following.textContent = `Following: ${this.data.following}`;
     bio.textContent = this.data.bio;
-
+    
     return card;
   }
 
@@ -64,8 +70,7 @@ function Card(data) {
           axios.get(follower.url)
             .then(res => {
               const card = new Card(res.data);
-              document.querySelector('.cards').appendChild(card.createComponent());
-              GitHubCalendar(`.calendar-${res.data.login}`, res.data.login, { responsive: true });
+              card.createCard();
             })
             .catch(err => console.log(err))
         });
@@ -81,6 +86,7 @@ axios.get('https://api.github.com/users/fbzr')
     card.createFollowersCards();
   })
   .catch(err => console.log(err));
+  
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -103,7 +109,13 @@ axios.get('https://api.github.com/users/fbzr')
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell'
+];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
