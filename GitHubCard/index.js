@@ -2,16 +2,59 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-function card(data) {
-  const card = document.createElement('div');
-  card.textContent = 'this is my card';
-  return card;
+function Card(data) {
+  this.data = data;
+  this.createComponent = () => {
+    const card = document.createElement('div');
+    const img = document.createElement('img');
+    const cardInfo = document.createElement('div');
+    const name = document.createElement('h3');
+    const username = document.createElement('p');
+    const location = document.createElement('p');
+    const profile = document.createElement('p');
+    const gitHub = document.createElement('a');
+    const followers = document.createElement('p');
+    const following = document.createElement('p');
+    const bio = document.createElement('p');
+
+    card.appendChild(img);
+    card.appendChild(cardInfo);
+    cardInfo.appendChild(name);
+    cardInfo.appendChild(username);
+    cardInfo.appendChild(location);
+    cardInfo.appendChild(profile);
+    profile.appendChild(gitHub);
+    cardInfo.appendChild(followers);
+    cardInfo.appendChild(following);
+    cardInfo.appendChild(bio);
+
+    card.classList.add('card');
+    cardInfo.classList.add('card-info');
+    name.classList.add('name');
+    username.classList.add('username');
+
+    img.setAttribute('src', this.data.avatar_url);
+    gitHub.setAttribute('href', this.data.html_url);
+
+    name.textContent = this.data.name;
+    username.textContent = this.data.login;
+    location.textContent = `Location: ${this.data.location}`;
+    profile.prepend('Profile: ');
+    gitHub.textContent = this.data.html_url;
+    followers.textContent = `Followers: ${this.data.followers}`;
+    following.textContent = `Following: ${this.data.following}`;
+    bio.textContent = this.data.bio;
+
+    console.log(this.data);
+    console.log(card);
+    return card;
+  }
 }
 
 axios.get('https://api.github.com/users/fbzr')
   .then(res => {
-    console.log(res.data);
-    document.querySelector('.cards').appendChild(card(res.data));
+    const card = new Card(res.data);
+    document.querySelector('.cards').appendChild(card.createComponent());
   })
   .catch(err => {
 
