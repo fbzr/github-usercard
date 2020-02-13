@@ -2,11 +2,18 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+function card(data) {
+  const card = document.createElement('div');
+  card.textContent = 'this is my card';
+  return card;
+}
+
 axios.get('https://api.github.com/users/fbzr')
-  .then(() => {
-    console.log('test');
+  .then(res => {
+    console.log(res.data);
+    document.querySelector('.cards').appendChild(card(res.data));
   })
-  .catch(() => {
+  .catch(err => {
 
   });
 
